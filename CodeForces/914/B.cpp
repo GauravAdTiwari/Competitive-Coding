@@ -52,71 +52,39 @@ void fast() {std::ios::sync_with_stdio(false);cin.tie(NULL);}
 //lli power(lli a,lli b){lli ans=1;while(b!=0){ if(b%2==1){ans*=a;}b/=2;a*=a;} return ans;}
 //lli invmod(lli a) {return pow(a,mod-2);}
 void pall(int a[],int n){for(int i=0;i<n;i++) cout<<a[i]<<" ";}
-class BinaryIndexTree {
-  vector<int > BIT;
-  int sz;
-
-public:
-
-  BinaryIndexTree(int _sz) {
-    sz = _sz;
-    BIT.resize(_sz+1, 0);
-  }
-
-  void update(int idx, int val) {
-    for(int i = idx; i < sz; i += i & -i) {
-      BIT[i] += val;
-    }
-  }
-
-  int query(int idx) {
-    int res = 0;
-    for(int i = idx; i; i -= i & -i) {
-      res += BIT[i];
-    }
-    return res;
-  }
-
-};
-const int N=100005;
-int n;
-BinaryIndexTree bit(N);
-int a[N];
 int main(){
     //fast();
-    #ifndef ONLINE_JUDGE
+   /* #ifndef ONLINE_JUDGE
         freopen("input.txt", "r", stdin);
         freopen("output.txt", "w", stdout);
-    #endif 
+    #endif */
 
+    int n;
     cin>>n;
-    rep(i,n){
+    lli a[n], c[n];
+    mset(c,0);
+    rep(i,n)
         cin>>a[i];
-        if(a[i]%2==0){
-            bit.update(i+1,1);
+    sort(a,a+n);
+    lli count=1, index=0;
+    bfor(i,n-1,1){
+        if(a[i]==a[i-1])
+            count++;
+        else{
+            c[index++]=count;
+            count=1;
+        } 
+    }
+    if(count!=1)c[index]=count;
+    else if(a[0]!=a[1])c[index]=1;
+    cout<<endl;
+    rep(i,index+1){
+        if(c[i]%2==1){
+            cout<<"Conan"<<endl;
+            return 0;
         }
     }
-    int q;
-    cin>>q;   
-    while(q--){
-        int t, l, r;
-        cin>>t>>l>>r;
-        if(t==0){
-            int x=bit.query(l);
-            int y=bit.query(l-1);
-            if(x>y && r%2!=0)
-                bit.update(l,-1);
-            else if(x==y && r%2==0)
-                bit.update(l,1);
-        }
-        if(t==1){
-            int ans=bit.query(r)-bit.query(l-1);
-            cout<<ans<<endl;
-        }
-        if(t==2){
-            int ans=bit.query(r)-bit.query(l-1);
-            cout<<(r-l+1)-ans<<endl;   
-        }  
-    }
+    cout<<"Agasa"<<endl;
+
     return 0;
 }
